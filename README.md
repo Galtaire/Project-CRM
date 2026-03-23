@@ -77,8 +77,45 @@ East office should have a lead-qualification audit to ensure agents aren't spend
 Another solution (if the office is open to it) is to have agents with the highest win rate from Central Office to have a formalized training for East Office.
 
 
+
 ### Product Profitability
-The highest sales in terms of product and series is MG Advanced (MG Series) and GTX Pro (GTX Series)
+
+#### Observations and Insights: 
+Out of all the products, the GTX Pro is the best seller with a total of 3,510,578 total sales. With a target price of 5482, sales agents sell the product at the average of 5489.88, which is a 7.88 Markup from the Target Price. 
+While the GTK 500 is sold at an average of 26,707.47. The product is price at 2678, which means that there is a 60.53 difference or "discount" given to buyers. 
+The highest profit for a deal is 30288 with the GTK 500 which was sold by Rosalina Dieter to Groovestreet. Kary Hendrixson on the other hand sold GTX Pro to Hatfan at the price of 3169, failing to sell at or above the target price of 4821. This gives a loss of 1652. 
+
+#### Recommendations: 
+The GTX Pro can be considered as the flagship product as it is the mid-range product priced at 4821. This product can be leveraged as a a High-Margin Leader, achieving a 7.88 Markup over its target price. I recommend analyzing the sales scripts used for the GTX Pro to see if the same selling techniques can be applied to other products, specifically those products that are not highly sellable. 
+Such analysis can be done through a case study on Rosalina Dieters deal on the GTK 500. Her managing to close a deal with a high markup is a massive success for price realization. A review on that deal can help understand the specifics on how the deal was closed and how other agents can replicate huge wins. 
+
+
+
+### Sales Agent Sales Velocity (Agent Efficiency Analysis)
+
+#### Observations and Insights:
+The average days for an agent to turn a deal into a win is 52 days, with Cecily Lampkin (Central Office) managing to convert deals in 42 days. While Moses Frase (Central Office) converts deals in 65 days, which is 2 months. 
+
+Central office averages 53 days to close and Win a deal, West closes at 51.5 days while East Office closes at 51 days. This means that East is very efficient in terms of client relationships, selling strategies, and negotiating power. Butin summary all three offices will mange to close a deal within 50 days, which is a month and a half. It all comes down to the leadership of the manager and the skills of the sales agent on how efficient the sale would be. 
+
+#### Recommendations: 
+Since both Cecily Lampkin and Moses Frase are in the same office, an internal mentorhip could be done to improve Frase's skills. This can also be done in Central Office as a whole. With Cecily mentoring, she could help other sales agents to improve. After mentoring, she could land into a leadership role as she knows how to be efficient as a Sales Agent. Her being a manager allows her to lead and nurture a team to be efficient. 
+
+Sales Agents with the highest sales velocity rate in East and West office can also do this within their own. Internal Mentorship can improve agent performance and can also nurture future leaders. 
+
+
+
+### Market Sector Analysis
+
+#### Observations and Insights:
+The Marketing sector has the highest win rate for closing a deal which with 59.94%. While the Retail sector is the most profitable as it has generated 1.86 Million in revenue. 799 deals has been closed for the sector and the Win Rate is 57.19. While the Technology Sector has a higher Win Rate of 57.60, it seems to come second to Retail as deals won for this sector is 671. 
+Nevertheless, the most profitable sectors are Retail, Technology, Medical, Software, and Marketing. 
+
+#### Recommendations: 
+To gain more revnue, sellers should pitch more to the Tech and Retail Sector as the products are more useful and much more in-demand unlike in the Finance Sector. Marketing the Flagship product (GTX Pro) is a safe way to gain steady footing and establishing a name in the sector. Other products can then be marketed to further meet the demands of the buyers.
+
+
+
 
 
 
