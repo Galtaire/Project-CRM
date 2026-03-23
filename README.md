@@ -1,31 +1,25 @@
-# CRM: Sales Opportunities and Performance Analysis
+# 📊 CRM: Sales Opportunities and Performance Analysis
 
-This project demonstrates a full-scale ETL (Extract, Transform, and Load) process and EDA (Exploratory Data Analysis) using MySQL. Raw CRM data was transformed into a structured relational database to extract actionable business insights regarding product sales, agent and managerial efficiency, product profitability, regional performance, and pipeline opportunities.
+This project demonstrates a full-scale **ETL (Extract, Transform, and Load)** process and **EDA (Exploratory Data Analysis)** using MySQL. Raw CRM data was transformed into a structured relational database to extract actionable business insights regarding product sales, agent and managerial efficiency, product profitability, regional performance, and pipeline opportunities.
 
 ---
 
 ## 🏗️ Architecture and Design
 
 ### Phase 1: Data Ingestion
-The first phase involved ingesting raw CSV files using `LOAD DATA INFILE`:
+The first phase involved ingesting raw CSV files using the `LOAD DATA INFILE` command:
 * `accounts.csv`
 * `products.csv`
 * `sales_pipeline.csv`
 * `sales_teams.csv`
 
-#### 📊 Accounts
-Contains data regarding company accounts, their sector, year established, generated revenue, employee count, and office locations.
+#### 📊 Data Dimensions
+* **Accounts:** Corporate entity data including sector, year established, revenue, and employee count.
+* **Products:** Product catalog details, including series and target sales prices.
+* **Sales Teams:** Hierarchical mapping of sales agents to their direct managers and regional offices.
+* **Sales Pipeline:** Transactional history tracking deal stages (**Won, Lost, Engaging, Prospecting**), opportunity values, and key dates.
 
-#### 📦 Products
-Contains product details, including product names, series, and target sales prices.
-
-#### 👥 Sales Teams
-Contains the names of sales agents, their direct managers, and their regional offices.
-
-#### 📈 Sales Pipeline
-Contains the transactional history of accounts and sales agents. It tracks deal stages (Won, Lost, Engaging, Prospecting), opportunity values, and engagement/close dates. 
-
-I established a **one-to-many relationship** branching from the `sales_pipeline` table to all dimension tables by assigning Primary Keys to every table and mapping them to Foreign Keys inside the pipeline table.
+I established a **one-to-many relationship** branching from the `sales_pipeline` table to all dimension tables by assigning Primary Keys and mapping them to Foreign Keys within the pipeline table.
 
 ---
 
@@ -36,16 +30,16 @@ I established a **one-to-many relationship** branching from the `sales_pipeline`
 ---
 
 ### Phase 2: Staging, Cleaning, and Transformation
-The second phase involved data layering, type-casting, and standardisation to ensure data integrity.
+The second phase utilized a three-layer staging process to ensure data integrity:
 
-* **Staging #1 - Data Immutability:** Duplicated raw files into staging tables. This preserved the original data while allowing me to safely clean, standardise text casing, and cast data types (such as string-to-date conversions).
-* **Staging #2 - Quality Assurance:** Validated the integrity of the data using `SELECT` statements to check for `NULL` values and structural anomalies.
-* **Staging #3 - Relational Mapping:** Created Surrogate Keys (`id`) and mapped relational columns (`account_id`, `product_id`, `agent_id`) to the pipeline table.
+1. **Staging #1 - Data Immutability:** Duplicated raw files into staging tables to preserve original data while standardizing text casing and casting string-to-date formats.
+2. **Staging #2 - Quality Assurance:** Validated data integrity by auditing for `NULL` values and structural anomalies (e.g., identifying 500 "Prospecting" deals previously excluded from funnel counts).
+3. **Staging #3 - Relational Mapping:** Created Surrogate Keys (`id`) and mapped relational columns (`account_id`, `product_id`, `agent_id`) to the final pipeline table.
 
 ---
 
 ### Phase 3: Database Performance Optimization
-To ensure sub-second query execution at scale, I applied B-Tree indexing to heavily referenced Foreign Keys and high-frequency filter columns:
+To ensure sub-second query execution at scale, I applied B-Tree indexing to high-frequency filter columns and foreign keys:
 
 ```sql
 CREATE INDEX idx_sp_account ON 1_sales_pipeline(account_id);
@@ -53,84 +47,62 @@ CREATE INDEX idx_sp_product ON 1_sales_pipeline(product_id);
 CREATE INDEX idx_sp_agent ON 1_sales_pipeline(agent_id);
 CREATE INDEX idx_sp_deal_stage ON 1_sales_pipeline(deal_stage);
 ```
+
 ---
 
 ## 💡 Key Business Insights
 
-### Sales Agent and Managerial Performance 
+### 1. Sales Agent and Managerial Performance 
 
-#### Observations and Insights: 
-Overall average win rate of employees is 41.74%  while the average lose rate is 24.05%. The agent with the highest conversion with Reed Clapper (East) with a 65.40% Win rate
-With Donn Cantrell (East) having highest lose rate of 42.55%. In terms of volume, Darcel Schlect (Central) has the highest total of wins with a number of 349 deals won while also having highest number of losses having 204 deals lost. 
+#### **Observations and Insights:**
+* **Conversion Benchmarks:** The organization maintains an overall average win rate of **41.74%**, while the average loss rate is **24.05%**.
+* **Performance Leaders:** **Reed Clapper (East)** leads the organization with a **65.40% Win Rate**, while **Donn Cantrell (East)** recorded the highest loss rate at **42.55%**.
+* **Volume Drivers:** **Darcel Schlecht (Central)** handles the highest volume, securing **349 wins** and **204 losses**.
+* **Regional Dynamics:** The **Central Office** delivers the highest volume (**1,629 wins**), but the **East Office** is the most efficient with a **51.11% Win Rate**.
+* **Price Integrity:** **Rocco Neubert (East)** achieved the highest **Team Realization at 52.84%**, prioritizing high-quality revenue over discounting. Conversely, **Melvin Marxen (Central)** recorded the lowest realization (**44.73%**).
 
-For Regional Performance, the Central Office holds the highest number of Wins with a total of 1629 successful deals. West Office is second with a total of 1438 Wins while East Office is Third, having a total of 1171 total Wins. 
-In terms of Win Rate, East Office is the highest with a 51.11% Win Rate but also holds the highest lose rate with a 29.99% losing rate. 
+#### **Recommendations:**
+* **Execute Lead-Qualification Audits:** The East office presents a "High-Risk/High-Reward" profile. I recommend an audit to ensure agents are not over-investing in low-probability deals.
+* **Cross-Regional Training:** Implement formalized training where top performers from the Central Office mentor East Office agents to stabilize conversion volatility.
 
-In terms of Managerial Analysis, Rocco Neubert and his Team of East Office has the highest Team Realization Percentage with 52.84% while having a average of 46 sales velocity. 
-Melvin Marxen and his Team from Central Office has the highest number of wins with a total of 882 while also having the highest number of losses totaling to 536. 
-Rocco Neubert and his team has the highest percentage of price integrity. With 52.84% of Team Realization, Rocco Neubert’s management style prioritizes high-quality revenue over high-volume discounting, leading to healthier bottom-line results for the region.
-Melvin Marxen and his Team's Realization Percentage is 44.73%, which is the lowest. Him and his team has te lowest win rate and lowest team realization percentage. 
+---
 
-#### Recommendations: 
-The main focus for improvement is East office. Even though they have the highest winning rate percentage, they also have the highest losing percentage of 29.99%. This suggests that there is a High-risk / High-reward environment.
-East office should have a lead-qualification audit to ensure agents aren't spending too much time on deals that have a high probability of failing. 
-Another solution (if the office is open to it) is to have agents with the highest win rate from Central Office to have a formalized training for East Office.
+### 2. Product Profitability
 
+#### **Observations and Insights:**
+* **Flagship Performance:** The **GTX Pro** is the best seller (**3,510,578 units**). With a target price of **4,821**, it averages a sale price of **5,489.88**—a **7.88 unit markup**.
+* **Pricing Gaps:** The **GTK 500** consistently requires an average **60.53 discount** below its target price to close.
+* **Deal Variance:** **Rosalina Dieter** secured a record **30,288 profit** on a GTK 500 sale, while **Kary Hendrixson** recorded a **1,652 loss** on a GTX Pro sale.
 
+#### **Recommendations:**
+* **Leverage the GTX Pro:** As a high-margin leader, the sales techniques used for the GTX Pro should be analyzed and applied to underperforming lines to defend price integrity.
+* **Success Case Study:** Conduct a formal review of high-markup deals to understand specific negotiation techniques and replicate those wins across the fleet.
 
-### Product Profitability
+---
 
-#### Observations and Insights: 
-Out of all the products, the GTX Pro is the best seller with a total of 3,510,578 total sales. With a target price of 5482, sales agents sell the product at the average of 5489.88, which is a 7.88 Markup from the Target Price. 
-While the GTK 500 is sold at an average of 26,707.47. The product is price at 2678, which means that there is a 60.53 difference or "discount" given to buyers. 
-The highest profit for a deal is 30288 with the GTK 500 which was sold by Rosalina Dieter to Groovestreet. Kary Hendrixson on the other hand sold GTX Pro to Hatfan at the price of 3169, failing to sell at or above the target price of 4821. This gives a loss of 1652. 
+### 3. Sales Velocity (Efficiency Analysis)
 
-#### Recommendations: 
-The GTX Pro can be considered as the flagship product as it is the mid-range product priced at 4821. This product can be leveraged as a a High-Margin Leader, achieving a 7.88 Markup over its target price. I recommend analyzing the sales scripts used for the GTX Pro to see if the same selling techniques can be applied to other products, specifically those products that are not highly sellable. 
-Such analysis can be done through a case study on Rosalina Dieters deal on the GTK 500. Her managing to close a deal with a high markup is a massive success for price realization. A review on that deal can help understand the specifics on how the deal was closed and how other agents can replicate huge wins. 
+#### **Observations and Insights:**
+* **Speed-to-Close:** The average time to win a deal is **52 days**. **Cecily Lampkin (Central)** is the efficiency leader (**42 days**), while **Moses Frase (Central)** lags at **65 days**.
+* **Regional Benchmarks:** All three offices average between **51 and 53 days** (approx. 1.7 months). The East Office maintains a slight competitive edge in speed and negotiation power.
 
+#### **Recommendations:**
+* **Internal Mentorship:** Since the fastest and slowest agents (Lampkin and Frase) are in the same office, a mentorship program should be established to transfer high-velocity techniques.
+* **Leadership Pipeline:** Cecily Lampkin’s ability to maintain high velocity makes her an ideal candidate for future leadership roles to lead and nurture a team.
 
+---
 
-### Sales Agent Sales Velocity (Agent Efficiency Analysis)
+### 4. Market Sector Analysis
 
-#### Observations and Insights:
-The average days for an agent to turn a deal into a win is 52 days, with Cecily Lampkin (Central Office) managing to convert deals in 42 days. While Moses Frase (Central Office) converts deals in 65 days, which is 2 months. 
+#### **Observations and Insights:**
+* **Sector Efficiency:** The **Marketing** sector has the highest win rate (**59.94%**).
+* **Revenue Leaders:** **Retail** is the most profitable sector, generating **1.86 Million** in revenue with a **57.19% Win Rate**.
+* **Tech Sector:** Shows strong performance with a **57.60% Win Rate** and **671** deals won.
 
-Central office averages 53 days to close and Win a deal, West closes at 51.5 days while East Office closes at 51 days. This means that East is very efficient in terms of client relationships, selling strategies, and negotiating power. Butin summary all three offices will mange to close a deal within 50 days, which is a month and a half. It all comes down to the leadership of the manager and the skills of the sales agent on how efficient the sale would be. 
+#### **Recommendations:**
+* **Strategic Targeting:** Sales efforts should prioritize **Tech and Retail** sectors where demand and profitability are highest.
+* **Anchor Strategy:** Market the flagship **GTX Pro** heavily within these sectors to establish a revenue anchor before upselling secondary products.
 
-#### Recommendations: 
-Since both Cecily Lampkin and Moses Frase are in the same office, an internal mentorhip could be done to improve Frase's skills. This can also be done in Central Office as a whole. With Cecily mentoring, she could help other sales agents to improve. After mentoring, she could land into a leadership role as she knows how to be efficient as a Sales Agent. Her being a manager allows her to lead and nurture a team to be efficient. 
-
-Sales Agents with the highest sales velocity rate in East and West office can also do this within their own. Internal Mentorship can improve agent performance and can also nurture future leaders. 
-
-
-
-### Market Sector Analysis
-
-#### Observations and Insights:
-The Marketing sector has the highest win rate for closing a deal which with 59.94%. While the Retail sector is the most profitable as it has generated 1.86 Million in revenue. 799 deals has been closed for the sector and the Win Rate is 57.19. While the Technology Sector has a higher Win Rate of 57.60, it seems to come second to Retail as deals won for this sector is 671. 
-Nevertheless, the most profitable sectors are Retail, Technology, Medical, Software, and Marketing. 
-
-#### Recommendations: 
-To gain more revnue, sellers should pitch more to the Tech and Retail Sector as the products are more useful and much more in-demand unlike in the Finance Sector. Marketing the Flagship product (GTX Pro) is a safe way to gain steady footing and establishing a name in the sector. Other products can then be marketed to further meet the demands of the buyers.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+---
 
 
